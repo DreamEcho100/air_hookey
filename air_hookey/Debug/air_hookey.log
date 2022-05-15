@@ -1,4 +1,6 @@
 ﻿  Source.cpp
   Striker.cpp
+C:\Users\elmohandes\source\repos\air_hookey\air_hookey\Striker.h(56,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\elmohandes\source\repos\air_hookey\air_hookey\Striker.h(70,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   Generating Code...
   air_hookey.vcxproj -> C:\Users\elmohandes\source\repos\air_hookey\Debug\air_hookey.exe

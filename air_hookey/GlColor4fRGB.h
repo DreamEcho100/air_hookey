@@ -23,10 +23,10 @@ public:
 		float b,
 		float a
 	) {
-		this-> r = r;
-		this-> g = g;
-		this-> b = b;
-		this-> a = a;
+		this->r = r;
+		this->g = g;
+		this->b = b;
+		this->a = a;
 	}
 
 	void applyGLColor() {
