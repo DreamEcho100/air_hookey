@@ -1,12 +1,15 @@
 // Striker
 #pragma once
 
-#include <iostream>
 #include <windows.h>
 #include <gl/gl.h>
 #include<math.h>
+#include <iostream>
 
 #include "GlColor4fRGB.h"
+#include "CustomOpenGLUtils.h"
+#include "CustomOpenGLRect.h"
+#include "StrikerMoveAreaLimits.h"
 
 using namespace std;
 
@@ -22,6 +25,8 @@ public:
 	float velocityY;
 	GlColor4fRGB glColor3fRGB;
 	float speed;
+	CustomOpenGLRect goal;
+	StrikerMoveAreaLimits moveAreaLimits;
 	boolean moveRight = false;
 	boolean moveLeft = false;
 	boolean moveUp = false;
@@ -36,7 +41,9 @@ public:
 		float velocityX,
 		float velocityY,
 		GlColor4fRGB& glColor3fRGB,
-		float speed
+		float speed,
+		CustomOpenGLRect &goal,
+		StrikerMoveAreaLimits &moveAreaLimits
 	) {
 		this->positionX = positionX;
 		this->positionY = positionY;
@@ -45,38 +52,12 @@ public:
 		this->velocityY = velocityY;
 		this->glColor3fRGB = glColor3fRGB;
 		this->speed = speed;
+		this->goal = goal;
+		this->moveAreaLimits = moveAreaLimits;
 	}
-
-	// https://stackoverflow.com/a/25423759/13961420
-	void drawUnfilledCircle(float xi, float yj, float r1, int num1)
-	{
-		glBegin(GL_LINE_LOOP);
-		for (int i = 0; i < num1; i++)
-		{
-			float theta = 2.0f * M_PI * float(i) / float(num1);
-			float x1 = r1 * cosf(theta);
-			float y1 = r1 * sinf(theta);
-			glVertex2f(xi + x1, yj + y1);
-		}
-		glEnd();
-	}
-
-	void drawFilledCircle(float xi, float yj, float r1, int num1)
-	{
-		glBegin(GL_TRIANGLE_FAN);
-		glVertex2f(xi, yj);
-		for (int i = 0; i <= num1; i++)
-		{
-			float theta = 2.0f * M_PI * float(i) / float(num1);
-			float x1 = r1 * cosf(theta);
-			float y1 = r1 * sinf(theta);
-			glVertex2f(xi + x1, yj + y1);
-		}
-		glEnd();
-	}
-
 
 	void draw() {
+		goal.draw();
 		this->glColor3fRGB.applyGLColor();
 		drawFilledCircle(
 			this->positionX,
@@ -86,6 +67,23 @@ public:
 		);
 	}
 
-	void update() {}
+	void update() {
+		if (
+			this->moveUp &&
+			this->positionY + this->radius + this->velocityY < this->moveAreaLimits.north
+			) this->positionY += this->velocityY;
+		if (
+			this->moveRight &&
+			this->positionX + this->radius + this->velocityX <this->moveAreaLimits.east
+			) this->positionX += this->velocityX;
+		if (
+			this->moveDown &&
+			this->positionY - this->radius - this->velocityY >this->moveAreaLimits.south
+			) this->positionY -= this->velocityY;
+		if (
+			this->moveLeft &&
+			this->positionX - this->radius - this->velocityX > this->moveAreaLimits.west
+			) this->positionX -= this->velocityX;
+	}
 };
 

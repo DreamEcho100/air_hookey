@@ -26,11 +26,23 @@
     <ClCompile Include="Striker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CustomOpenGLUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomOpenGLRect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StrikerMoveAreaLimits.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PlayLayout.h" />
     <ClInclude Include="GlColor4fRGB.h" />
     <ClInclude Include="Puck.h" />
     <ClInclude Include="Striker.h" />
+    <ClInclude Include="CustomOpenGLUtils.h" />
+    <ClInclude Include="CustomOpenGLRect.h" />
+    <ClInclude Include="StrikerMoveAreaLimits.h" />
   </ItemGroup>
 </Project>

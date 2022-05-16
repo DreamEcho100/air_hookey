@@ -139,17 +139,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CustomOpenGLRect.cpp" />
+    <ClCompile Include="CustomOpenGLUtils.cpp" />
     <ClCompile Include="GlColor4fRGB.cpp" />
     <ClCompile Include="PlayLayout.cpp" />
     <ClCompile Include="Puck.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Striker.cpp" />
+    <ClCompile Include="StrikerMoveAreaLimits.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CustomOpenGLRect.h" />
+    <ClInclude Include="CustomOpenGLUtils.h" />
     <ClInclude Include="GlColor4fRGB.h" />
     <ClInclude Include="PlayLayout.h" />
     <ClInclude Include="Puck.h" />
     <ClInclude Include="Striker.h" />
+    <ClInclude Include="StrikerMoveAreaLimits.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

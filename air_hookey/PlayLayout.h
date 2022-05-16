@@ -2,83 +2,45 @@
 
 #include <windows.h>
 #include <gl/gl.h>
+#include <iostream>
 
 #include "GlColor4fRGB.h"
+#include "CustomOpenGLRect.h"
 
 class PlayLayout
 {
 
 public:
 
-	float canvasXAxis;
-	float canvasYAxis;
-	GlColor4fRGB canvasGlColor3fRGB;
-	float borderY;
-	float borderX;
-	GlColor4fRGB borderGlColor3fRGB;
-	float fieldY;
-	float fieldX;
-	GlColor4fRGB fieldGlColor3fRGB;
+	int windowWidth;
+	int windowHeight;
+	CustomOpenGLRect background;
+	CustomOpenGLRect border;
+	CustomOpenGLRect field;
 
 public:
 	PlayLayout() = default;
 	PlayLayout(
-		float canvasXAxis,
-		float canvasYAxis,
-		GlColor4fRGB& canvasGlColor3fRGB,
-		float borderY,
-		float borderX,
-		GlColor4fRGB& borderGlColor3fRGB,
-		float fieldY,
-		float fieldX,
-		GlColor4fRGB& fieldGlColor3fRGB
+		int windowWidth,
+		int windowHeight,
+		CustomOpenGLRect &background,
+		CustomOpenGLRect &border,
+		CustomOpenGLRect &field
 	)
 	{
-		this->canvasXAxis = canvasXAxis;
-		this->canvasYAxis = canvasYAxis;
-		this->canvasGlColor3fRGB = canvasGlColor3fRGB,
-		this->borderY = borderY;
-		this->borderX = borderX;
-		this->borderGlColor3fRGB = borderGlColor3fRGB;
-		this->fieldY = fieldY;
-		this->fieldX = fieldX;
-		this->fieldGlColor3fRGB = fieldGlColor3fRGB;
+
+		this->windowWidth = windowWidth;
+		this->windowHeight = windowHeight;
+
+		this->background = background;
+		this->border = border;
+		this->field = field;
 	}
 
-
 	void draw() {
-		//
-		glBegin(GL_QUADS);
-
-		this->canvasGlColor3fRGB.applyGLColor();
-		glVertex2f(this->canvasYAxis, -this->canvasXAxis);
-		glVertex2f(this->canvasYAxis, this->canvasXAxis);
-		glVertex2f(-this->canvasYAxis, this->canvasXAxis);
-		glVertex2f(-this->canvasYAxis, -this->canvasXAxis);
-
-		glEnd();
-
-		//
-		glBegin(GL_QUADS);
-		this->borderGlColor3fRGB.applyGLColor();
-
-		glVertex2f(this->borderY, -this->borderX);
-		glVertex2f(this->borderY, this->borderX);
-		glVertex2f(-this->borderY, this->borderX);
-		glVertex2f(-this->borderY, -this->borderX);
-
-		glEnd();
-
-		//
-		glBegin(GL_QUADS);
-		this->fieldGlColor3fRGB.applyGLColor();
-
-		glVertex2f(this->fieldY, -this->fieldX);
-		glVertex2f(this->fieldY, this->fieldX);
-		glVertex2f(-this->fieldY, this->fieldX);
-		glVertex2f(-this->fieldY, -this->fieldX);
-
-		glEnd();
+		this->background.draw();
+		this->border.draw();
+		this->field.draw();
 	}
 
 };
