@@ -21,7 +21,7 @@ public:
 		float positionY,
 		float width,
 		float height,
-		GlColor4fRGB &glColor3fRGB
+		GlColor4fRGB& glColor3fRGB
 	) {
 		this->positionX = positionX;
 		this->positionY = positionY;

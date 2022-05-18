@@ -23,9 +23,9 @@ public:
 	PlayLayout(
 		int windowWidth,
 		int windowHeight,
-		CustomOpenGLRect &background,
-		CustomOpenGLRect &border,
-		CustomOpenGLRect &field
+		CustomOpenGLRect& background,
+		CustomOpenGLRect& border,
+		CustomOpenGLRect& field
 	)
 	{
 

@@ -6,6 +6,7 @@
 #include<math.h>
 #include <iostream>
 
+#include "Vector.h"
 #include "GlColor4fRGB.h"
 #include "CustomOpenGLUtils.h"
 #include "CustomOpenGLRect.h"
@@ -18,15 +19,15 @@ using namespace std;
 class Striker
 {
 public:
-	float positionX;
-	float positionY;
+	Vector *position;
 	float radius;
-	float velocityX;
-	float velocityY;
-	GlColor4fRGB glColor3fRGB;
-	float speed;
-	CustomOpenGLRect goal;
-	StrikerMoveAreaLimits moveAreaLimits;
+	Vector *speed;
+	Vector *velocity;
+	Vector *acc;
+	GlColor4fRGB *glColor3fRGB;
+	CustomOpenGLRect *goal;
+	StrikerMoveAreaLimits *moveAreaLimits;
+	//
 	boolean moveRight = false;
 	boolean moveLeft = false;
 	boolean moveUp = false;
@@ -35,33 +36,31 @@ public:
 public:
 	Striker() = default;
 	Striker(
-		float positionX,
-		float positionY,
+		Vector *position,
 		float radius,
-		float velocityX,
-		float velocityY,
-		GlColor4fRGB& glColor3fRGB,
-		float speed,
-		CustomOpenGLRect &goal,
-		StrikerMoveAreaLimits &moveAreaLimits
+		Vector *speed,
+		Vector *velocity,
+		Vector *acc,
+		GlColor4fRGB *glColor3fRGB,
+		CustomOpenGLRect *goal,
+		StrikerMoveAreaLimits *moveAreaLimits
 	) {
-		this->positionX = positionX;
-		this->positionY = positionY;
+		this->position = position;
 		this->radius = radius;
-		this->velocityX = velocityX;
-		this->velocityY = velocityY;
-		this->glColor3fRGB = glColor3fRGB;
 		this->speed = speed;
+		this->velocity = velocity;
+		this->acc = acc;
+		this->glColor3fRGB = glColor3fRGB;
 		this->goal = goal;
 		this->moveAreaLimits = moveAreaLimits;
 	}
 
 	void draw() {
-		goal.draw();
-		this->glColor3fRGB.applyGLColor();
+		goal->draw();
+		this->glColor3fRGB->applyGLColor();
 		drawFilledCircle(
-			this->positionX,
-			this->positionY,
+			this->position->x,
+			this->position->y,
 			this->radius,
 			360
 		);
@@ -70,20 +69,19 @@ public:
 	void update() {
 		if (
 			this->moveUp &&
-			this->positionY + this->radius + this->velocityY < this->moveAreaLimits.north
-			) this->positionY += this->velocityY;
+			this->position->y + this->radius + this->speed->y < this->moveAreaLimits->north
+			) this->position->y += this->speed->y;
 		if (
 			this->moveRight &&
-			this->positionX + this->radius + this->velocityX <this->moveAreaLimits.east
-			) this->positionX += this->velocityX;
+			this->position->x + this->radius + this->speed->x < this->moveAreaLimits->east
+			) this->position->x += this->speed->x;
 		if (
 			this->moveDown &&
-			this->positionY - this->radius - this->velocityY >this->moveAreaLimits.south
-			) this->positionY -= this->velocityY;
+			this->position->y - this->radius - this->speed->y > this->moveAreaLimits->south
+			) this->position->y -= this->speed->y;
 		if (
 			this->moveLeft &&
-			this->positionX - this->radius - this->velocityX > this->moveAreaLimits.west
-			) this->positionX -= this->velocityX;
+			this->position->x - this->radius - this->speed->x > this->moveAreaLimits->west
+			) this->position->x -= this->speed->x;
 	}
 };
-

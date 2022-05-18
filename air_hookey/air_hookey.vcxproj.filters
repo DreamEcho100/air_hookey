@@ -35,6 +35,12 @@
     <ClCompile Include="StrikerMoveAreaLimits.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="collisionUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PlayLayout.h" />
@@ -44,5 +50,7 @@
     <ClInclude Include="CustomOpenGLUtils.h" />
     <ClInclude Include="CustomOpenGLRect.h" />
     <ClInclude Include="StrikerMoveAreaLimits.h" />
+    <ClInclude Include="collisionUtils.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
 </Project>
