@@ -41,6 +41,9 @@
     <ClCompile Include="Vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ball2d.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PlayLayout.h" />
@@ -52,5 +55,6 @@
     <ClInclude Include="StrikerMoveAreaLimits.h" />
     <ClInclude Include="collisionUtils.h" />
     <ClInclude Include="Vector.h" />
+    <ClInclude Include="Ball2d.h" />
   </ItemGroup>
 </Project>

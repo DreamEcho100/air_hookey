@@ -14,9 +14,9 @@ public:
 		this->y = y;
 	}
 
-	Vector* add(float x, float y){
-		this->x += x;
-		this->y += y;
+	Vector* add(Vector* vector){
+		this->x += vector->x;
+		this->y += vector->y;
 		return this;
 	}
 	Vector* addRNV(Vector* vector){
@@ -32,13 +32,13 @@ public:
 		return new Vector(this->x-vector->x, this->y-vector->y);
 	}
 
-	double magnitude(){
+	float magnitude(){
 		return sqrt(pow(this->x, 2) + pow(this->y, 2));
 	}
 
-	Vector* multiply(float x, float y){
-		this->x *= x;
-		this->y *= y;
+	Vector* multiply(float num){
+		this->x *= num;
+		this->y *= num;
 		return this;
 	}
 	Vector* multiplyRNV(float num){
@@ -71,6 +71,10 @@ public:
 		} else {
 			return new Vector(this->x/this->magnitude(), this->y/this->magnitude());
 		}
+	}
+
+	float dot(Vector v1, Vector v2) {
+		return v1.x * v2.x + v1.y * v2.y;
 	}
 };
 

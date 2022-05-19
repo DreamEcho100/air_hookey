@@ -6,16 +6,17 @@
 #include "StrikerMoveAreaLimits.h"
 #include "Striker.h"
 #include "collisionUtils.h"
+//
+#include "Ball2d.cpp"
 
 #pragma once
 
 //extern float M_PI = 3.14159265358979323846;
-class Puck
+class Puck: public Ball2d
 {
 public:
 	Vector *position;
 	float radius;
-	Vector *speed;
 	Vector *velocity;
 	Vector *acc;
 	float acceleration = 1;
@@ -24,15 +25,13 @@ public:
 	Striker* player1;
 	Striker* player2;
 	//Striker *players[];
-	float endX = 0;
-	float endY = 0;
+	float moveCounter = 0;
 
 public:
 	Puck() = default;
 	Puck(
 		Vector *position,
 		float radius,
-		Vector *speed,
 		Vector *velocity,
 		Vector *acc,
 		GlColor4fRGB *glColor3fRGB,
@@ -40,59 +39,58 @@ public:
 		Striker* player1,
 		Striker* player2
 		//Striker *players[]
+	): Ball2d(
+		position,
+		radius,
+		velocity,
+		acc,
+		glColor3fRGB,
+		moveAreaLimits
 	) {
-		this->position=position;
-		this->radius=radius;
-		this->speed=speed;
-		this->velocity=velocity;
-		this->acc=acc;
+		this->position = position;
+		this->radius = radius;
+		this->velocity = velocity;
+		this->acc = acc;
 		this->glColor3fRGB = glColor3fRGB;
 		this->moveAreaLimits = moveAreaLimits;
+		//
 		this->player1 = player1;
 		this->player2 = player2;
 		//this->players = players;
 	}
 
-	void draw() {
-		this->glColor3fRGB->applyGLColor();
-		drawFilledCircle(
-			this->position->x,
-			this->position->y,
-			this->radius,
-			360
-		);
-	}
-
 	void update() {
-		if (this->endX != 0) {
-			double x = endX * 0.01;
-			this->position->x += x;
-			this->endX -= x;
+		if (this->moveCounter > 0) {
+			//double x = moveCounter * 0.01;
+			if (
+				this->position->x + this->velocity->x + (this->velocity->x / this->velocity->x) * 2> moveAreaLimits->east ||
+				this->position->x + this->velocity->x + (this->velocity->x / this->velocity->x) * 2< moveAreaLimits->west
+				) {
+					this->position->add(new Vector(this->velocity->x * -1, 0));
+					this->velocity->x *= -1;
+					}
+			if (
+				this->position->y + this->velocity->y + (this->velocity->y / this->velocity->y) * 2> moveAreaLimits->north
+				||
+				this->position->y + this->velocity->y + (this->velocity->y / this->velocity->y) * 2< moveAreaLimits->south
+				) {
+					this->position->add(new Vector(0, this->velocity->y * -1));
+					this->velocity->y *= -1;
+					}
+
+			this->position->add(this->velocity);
+			this->moveCounter -= 15;
 		}
-		if (this->endY != 0) {
-			double y = endY * 0.01;
-			this->position->y -= y;
-			this->endY -= y;
-		}
+
 		float dx = this->position->x - this->player1->position->x;
 		float dy = this->position->y - this->player1->position->y;
 
 		float distance = sqrt((dx * dx) + (dy * dy));
 
-		//float forceDirectionX = dx / distance;
-		//float forceDirectionY = dy / distance;
-		//// Max distance, past that the force will be 0
-		//int maxDistance = 100;
-		//float force = (maxDistance - distance) / maxDistance;
-		//if (force < 0) force = 0;
-		//float directionX = forceDirectionX * force * this->speed->x * 0.6;
-		//float directionY = forceDirectionY * force * this->speed->y * 0.6;
-
 		if (distance < (this->radius + this->player1->radius)) {
-			//this->position->x -= directionX * 1.5;
-			//this->position->y -= directionY * 1.5;
-			std::cout << "1" << std::endl;
-			// calculateNewVelocities(player1);
+			this->resolveCollision(player1);
+			player1->position->add(new Vector(player1->velocity->x * -1, player1->velocity->y * -1));
+			this->moveCounter = 2500;
 
 		}
 
@@ -102,39 +100,11 @@ public:
 		distance = sqrt((dx * dx) + (dy * dy));
 
 		if (distance < (this->radius + this->player2->radius)) {
-			std::cout << "2" << std::endl;
+			this->resolveCollision(player2);
+			player2->position->add(new Vector(player2->velocity->x * -1, player2->velocity->y * -1));
+			this->moveCounter = 2500;
 		}
 	}
-
-	void calculateNewVelocities(Striker *player) {
-			    double mass1 = player->radius;
-                double mass2 = this->radius;
-                double velX1 = player->velocity->x;
-                double velX2 = this->velocity->x;
-                double velY1 = player->velocity->y;
-                double velY2 = this->velocity->y;
-                
-                double newVelX1 = (velX1 * (mass1 - mass2) + (2 * mass2 * velX2)) / (mass1 + mass2);
-                double newVelX2 = (velX2 * (mass2 - mass1) + (2 * mass1 * velX1)) / (mass1 + mass2);
-                double newVelY1 = (velY1 * (mass1 - mass2) + (2 * mass2 * velY2)) / (mass1 + mass2);
-                double newVelY2 = (velY2 * (mass2 - mass1) + (2 * mass1 * velY1)) / (mass1 + mass2);
-                // trace (velX1 * (mass1 - mass2) );
-								// trace (2 * mass2 * velX2);
-								// trace(newVelX1);
-								// double s = 0 / 20;
-								// trace(s);
-				
-				
-                //player->velocity->x = newVelX1;
-                this->velocity->x = newVelX2;
-                //player->velocity->y = newVelY1;
-                this->velocity->y = newVelY2;
-                
-                //player->position->x = player->position->x + newVelX1;
-                //player->position->y = player->position->y + newVelY1;
-                this->endX = this->position->x + newVelX2;
-                this->endY = this->position->y + newVelY2;
-		}
 
 	// isCollide(aReact, bRect) {
 	// 	return !(
@@ -142,58 +112,64 @@ public:
 	// 		)
 	// }
 
-/*
-//collision resolution
-//calculates the balls new velocity vectors after the collision
-	void coll_res_bb(b1, b2){
-		//collision normal vector
-		let normal = b1.pos.subtr(b2.pos).unit();
-		//relative velocity vector
-		let relVel = b1.vel.subtr(b2.vel);
-		//separating velocity - relVel projected onto the collision normal vector
-		let sepVel = Vector.dot(relVel, normal);
-		//the projection value after the collision (multiplied by -1)
-		let new_sepVel = -sepVel;
-		//collision normal vector with the magnitude of the new_sepVel
-		let sepVelVec = normal.mult(new_sepVel);
-
-		//adding the separating velocity vector to the original vel. vector
-		b1.vel = b1.vel.add(sepVelVec);
-		//adding its opposite to the other balls original vel. vector
-		b2.vel = b2.vel.add(sepVelVec.mult(-1));
+	/**
+	 * Rotates coordinate system for velocities
+	 *
+	 * Takes velocities and alters them as if the coordinate system they're on was rotated
+	 *
+	 * @param  Object | velocity | The velocity of an individual particle
+	 * @param  Float  | angle    | The angle of collision between two objects in radians
+	 * @return Object | The altered x and y velocities after the coordinate system has been rotated
+	 */
+	Vector* rotate(Vector* velocity, float angle) {
+		return new Vector(
+			velocity->x * cos(angle) - velocity->y * sin(angle),
+			velocity->x * sin(angle) + velocity->y * cos(angle)
+		);
 	}
-	*/
+
+	/**
+	 * Swaps out two colliding particles' x and y velocities after running through
+	 * an elastic collision reaction equation
+	 *
+	 * @param  Object | player      | A player object with x and y coordinates, plus velocity
+	 * @return Null | Does not return a value
+	 */
+	void resolveCollision(Striker*player) {
+		float xVelocityDiff = player->velocity->x - this->velocity->x;
+		float yVelocityDiff = player->velocity->y - this->velocity->y;
+
+		float xDist = this->position->x - player->position->x;
+		float yDist = this->position->y - player->position->y;
+
+		// Prevent accidental overlap of players
+		if (xVelocityDiff * xDist + yVelocityDiff * yDist >= 0) {
+
+			// Grab angle between the two colliding players
+			float angle = -atan2(this->position->y - player->position->y, this->position->x - player->position->x);
+
+			// Store mass in var for better readability in collision equation
+			float m1 = player->radius;
+			float m2 = this->radius;
+
+			// Velocity before equation
+			Vector* u1 = rotate(player->velocity, angle);
+			Vector* u2 = rotate(this->velocity, angle);
+			
+			// Velocity after 1d collision equation
+			Vector* v1 = new Vector(u1->x * (m1 - m2) / (m1 + m2) + u2->x * 2 * m2 / (m1 + m2), u1->y );
+			Vector* v2 = new Vector(u2->x * (m1 - m2) / (m1 + m2) + u1->x * 2 * m2 / (m1 + m2), u2->y );
+
+			// Final velocity after rotating axis back to original location
+			Vector* vFinal1 = rotate(v1, -angle);
+			Vector* vFinal2 = rotate(v2, -angle);
+			
+			// Swap player velocities for realistic bounce effect
+			//player->velocity->x = vFinal1->x;
+			//player->velocity->y = vFinal1->y;
+
+			this->velocity->x = vFinal2->x;
+			this->velocity->y = vFinal2->y;
+		}
+	}
 };
-/*
-update() {
-	context.fillStyle = this.color;
-	// Collision detection
-	const dx = mouse.x - this.x;
-	const dy = mouse.y - this.y;
-	const distance = Math.sqrt(dx ** 2 + dy ** 2);
-	const forceDirectionX = dx / distance;
-	const forceDirectionY = dy / distance;
-
-	// Max distance, past that the force will be 0
-	const maxDistance = 100;
-	let force = (maxDistance - distance) / maxDistance;
-	//if (force < 0) force = 0;
-
-	const directionX = forceDirectionX * force * this.density * 0.6;
-	const directionY = forceDirectionY * force * this.density * 0.6;
-
-	if (distance < mouse.radius + this.size) {
-		this.x -= directionX * 1.5;
-		this.y -= directionY * 1.5;
-	} else {
-		if (this.x !== this.baseX) {
-			this.x -= (this.x - this.baseX) / 20;
-		}
-		if (this.y !== this.baseY) {
-			this.y -= (this.y - this.baseY) / 20;
-		}
-	}
-
-	this.draw();
-}
-*/

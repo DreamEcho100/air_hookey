@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ball2d.cpp" />
     <ClCompile Include="collisionUtils.cpp" />
     <ClCompile Include="CustomOpenGLRect.cpp" />
     <ClCompile Include="CustomOpenGLUtils.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ball2d.h" />
     <ClInclude Include="collisionUtils.h" />
     <ClInclude Include="CustomOpenGLRect.h" />
     <ClInclude Include="CustomOpenGLUtils.h" />
