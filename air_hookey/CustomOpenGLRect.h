@@ -1,6 +1,5 @@
 #include <windows.h>
 #include <gl/gl.h>
-#include <iostream>
 
 #include "GlColor4fRGB.h"
 

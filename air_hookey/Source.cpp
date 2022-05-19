@@ -3,7 +3,6 @@
 #include <gl/glut.h>
 //
 #include<math.h>
-#include <iostream>
 //
 #include<synchapi.h>
 //
@@ -125,14 +124,7 @@ void initBackground() {
 	);
 }
 void initPlayer1() {
-	CustomOpenGLRect goal = *new CustomOpenGLRect(
-		0 - 125,
-		-playLayout->field.positionY + 40,
-		250,
-		40,
-		*new GlColor4fRGB(0.0f, 0.0f, 0.0f, 1.0f)
-	);
-	Vector position = *new Vector(0, -playLayout->field.positionY + 75 + 50);
+	float goalPositionY = -playLayout->field.positionY + 40;
 	player1 = new Striker(
 		new Vector(0, -playLayout->field.positionY + 75 + 50),
 		75,
@@ -140,23 +132,24 @@ void initPlayer1() {
 		new Vector(4, 4),
 		new Vector(1, 1),
 		new GlColor4fRGB(0.5f, 0.0f, 1.0f, 1.0f),
-		&goal,
+		new CustomOpenGLRect(
+			0 - 125,
+			goalPositionY,
+			250,
+			40,
+			*new GlColor4fRGB(0.0f, 0.0f, 0.0f, 1.0f)
+		),
 		new StrikerMoveAreaLimits(
 			playLayout->field.positionY - (playLayout->field.height / 2),
 			playLayout->field.positionX + playLayout->field.width,
-			goal.positionY,
+			goalPositionY,
 			playLayout->field.positionX
 		)
 	);
 }
 void initPlayer2() {
-	CustomOpenGLRect goal = *new CustomOpenGLRect(
-		0 - 125,
-		playLayout->field.positionY,
-		250,
-		40,
-		*new GlColor4fRGB(0.0f, 0.0f, 0.0f, 1.0f)
-	);
+	float goalPositionY = playLayout->field.positionY;
+	float goalHeight = 40;
 	player2 = new Striker(
 		new Vector(0, playLayout->field.positionY - 75 - 50),
 		75,
@@ -164,9 +157,15 @@ void initPlayer2() {
 		new Vector(4, 4),
 		new Vector(1, 1),
 		new GlColor4fRGB(.0f, 0.0f, 0.5f, 1.0f),
-		&goal,
+		new CustomOpenGLRect(
+			0 - 125,
+			goalPositionY,
+			250,
+			goalHeight,
+			*new GlColor4fRGB(0.0f, 0.0f, 0.0f, 1.0f)
+		),
 		new StrikerMoveAreaLimits(
-			goal.positionY - goal.height,
+			goalPositionY - goalHeight,
 			playLayout->field.positionX + playLayout->field.width,
 			playLayout->field.positionY - (playLayout->field.height / 2),
 			playLayout->field.positionX
@@ -225,7 +224,7 @@ void InitGraphics(int argc, char* argv[]) {
 	//Create an 800x600 window with its top-left corner at pixel (100, 100)
 	glutInitWindowPosition(0, 0); //pass (-1, -1) for Window-Manager defaults
 	glutInitWindowSize(playLayout->windowWidth, playLayout->windowHeight);
-	glutCreateWindow("OpenGL Lab");
+	glutCreateWindow("air_hookey");
 	//OnDisplay will handle the paint event
 	glutDisplayFunc(OnDisplay);
 
@@ -249,7 +248,7 @@ void calcFramePerSecond()
 	}
 
 	if (frameCounter < 60) {
-		cout << frameCounter << endl;
+		//cout << frameCounter << endl;
 		frameCounter += (currentFrameTime - prevFrameTime) / 1000.0;
 		updateFrame = true;
 		return;

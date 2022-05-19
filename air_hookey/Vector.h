@@ -1,6 +1,6 @@
 #include <math.h>
 
-#pragma once;
+#pragma once
 
 class Vector
 {

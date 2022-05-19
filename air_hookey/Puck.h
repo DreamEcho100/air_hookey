@@ -65,12 +65,12 @@ public:
 
 	void update() {
 		if (this->endX != 0) {
-			float x = endX * 0.01;
+			double x = endX * 0.01;
 			this->position->x += x;
 			this->endX -= x;
 		}
 		if (this->endY != 0) {
-			float y = endY * 0.01;
+			double y = endY * 0.01;
 			this->position->y -= y;
 			this->endY -= y;
 		}
