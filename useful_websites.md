@@ -10,6 +10,7 @@
 - [How would you pass an array to a constructor?](https://www.reddit.com/r/cpp_questions/comments/cx7iyt/how_would_you_pass_an_array_to_a_constructor/)
 - [How do you define a global function in C++?](https://stackoverflow.com/a/6874391/13961420)
 - [How to react on KeyPress + Release?](https://gamedev.net/forums/topic/660020-how-to-react-on-keypress-release/5174660/)
+- [How to Code: Collision Detection Part II](https://youtu.be/789weryntzM)
 
 ## 2
 

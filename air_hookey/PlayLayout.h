@@ -14,18 +14,18 @@ public:
 
 	int windowWidth;
 	int windowHeight;
-	CustomOpenGLRect background;
-	CustomOpenGLRect border;
-	CustomOpenGLRect field;
+	CustomOpenGLRect *background;
+	CustomOpenGLRect *border;
+	CustomOpenGLRect *field;
 
 public:
 	PlayLayout() = default;
 	PlayLayout(
 		int windowWidth,
 		int windowHeight,
-		CustomOpenGLRect& background,
-		CustomOpenGLRect& border,
-		CustomOpenGLRect& field
+		CustomOpenGLRect *background,
+		CustomOpenGLRect *border,
+		CustomOpenGLRect *field
 	)
 	{
 
@@ -38,9 +38,9 @@ public:
 	}
 
 	void draw() {
-		this->background.draw();
-		this->border.draw();
-		this->field.draw();
+		this->background->draw();
+		this->border->draw();
+		this->field->draw();
 	}
 
 };

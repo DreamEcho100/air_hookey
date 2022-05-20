@@ -63,16 +63,16 @@ public:
 		if (this->moveCounter > 0) {
 			//double x = moveCounter * 0.01;
 			if (
-				this->position->x + this->velocity->x + (this->velocity->x / this->velocity->x) * 2> moveAreaLimits->east ||
-				this->position->x + this->velocity->x + (this->velocity->x / this->velocity->x) * 2< moveAreaLimits->west
+				this->position->x + this->radius + this->velocity->x > moveAreaLimits->east ||
+				this->position->x - this->radius + this->velocity->x < moveAreaLimits->west
 				) {
 					this->position->add(new Vector(this->velocity->x * -1, 0));
 					this->velocity->x *= -1;
 					}
 			if (
-				this->position->y + this->velocity->y + (this->velocity->y / this->velocity->y) * 2> moveAreaLimits->north
+				this->position->y + this->radius + this->velocity->y > moveAreaLimits->north
 				||
-				this->position->y + this->velocity->y + (this->velocity->y / this->velocity->y) * 2< moveAreaLimits->south
+				this->position->y - this->radius + this->velocity->y < moveAreaLimits->south
 				) {
 					this->position->add(new Vector(0, this->velocity->y * -1));
 					this->velocity->y *= -1;
@@ -90,7 +90,7 @@ public:
 		if (distance < (this->radius + this->player1->radius)) {
 			this->resolveCollision(player1);
 			player1->position->add(new Vector(player1->velocity->x * -1, player1->velocity->y * -1));
-			this->moveCounter = 2500;
+			this->moveCounter = 3000;
 
 		}
 
@@ -102,7 +102,7 @@ public:
 		if (distance < (this->radius + this->player2->radius)) {
 			this->resolveCollision(player2);
 			player2->position->add(new Vector(player2->velocity->x * -1, player2->velocity->y * -1));
-			this->moveCounter = 2500;
+			this->moveCounter = 3000;
 		}
 	}
 
@@ -111,6 +111,34 @@ public:
 	// 		(aReact.bottom < bRect.top) || (aReact.top > bRect.bottom) || (aReact.right < bRect.left) || (aReact.left > bRect.right)
 	// 		)
 	// }
+
+	// https://stackoverflow.com/a/69860772/13961420
+bool hasRectIntersection (
+	// {x: cx, y: cy, r: cr}, this
+	// {x, y, width, height}
+	CustomOpenGLRect* rect
+	) {
+  float distX = abs(this->position->x - rect->position->x - rect->width / 2);
+  float distY = abs(this->position->y - rect->position->y - rect->height / 2);
+
+  if (distX > (rect->width / 2 + this->radius)) {
+    return false;
+  }
+  if (distY > (rect->height / 2 + this->radius)) {
+    return false;
+  }
+
+  if (distX <= (rect->width / 2)) {
+    return true;
+  }
+  if (distY <= (rect->height / 2)) {
+    return true;
+  }
+
+  float dx = distX - rect->width / 2; // Δx
+  float dy = distY - rect->height / 2; // Δy
+  return dx * dx + dy * dy <= this->radius * this->radius;
+};
 
 	/**
 	 * Rotates coordinate system for velocities

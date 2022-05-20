@@ -92,24 +92,21 @@ void initBackground() {
 	float fieldWidth = borderWidth - (fieldMarginX * 2);
 	float fieldHeight = borderHeight - (fieldMarginY * 2);
 
-	CustomOpenGLRect background = *new CustomOpenGLRect(
-		canvasX,
-		canvasY,
+	CustomOpenGLRect* background = new CustomOpenGLRect(
+		new Vector(canvasX, canvasY),
 		canvasWidth,
 		canvasHeight,
 		*new GlColor4fRGB(0.0f, 0.0f, 0.0f, 1.0f)
 	);
 
-	CustomOpenGLRect border = *new CustomOpenGLRect(
-		borderX,
-		borderY,
+	CustomOpenGLRect* border = new CustomOpenGLRect(
+		new Vector(borderX, borderY),
 		borderWidth,
 		borderHeight,
 		*new GlColor4fRGB(1.0f, 0.0f, 0.0f, 1.0f)
 	);
-	CustomOpenGLRect field = *new CustomOpenGLRect(
-		fieldX,
-		fieldY,
+	CustomOpenGLRect* field = new CustomOpenGLRect(
+		new Vector(fieldX, fieldY),
 		fieldWidth,
 		fieldHeight,
 		*new GlColor4fRGB(1.0f, 1.0f, 1.0f, 1.0f)
@@ -124,23 +121,22 @@ void initBackground() {
 	);
 }
 void initPlayer1() {
-	float goalPositionY = -playLayout->field.positionY + 40;
+	float goalPositionY = -playLayout->field->position->y + 40;
 	player1 = new Striker(
-		new Vector(0, -playLayout->field.positionY + 75 + 50),
+		new Vector(0, -playLayout->field->position->y + 75 + 50),
 		75.0f,
 		new Vector(0, 0),
 		new Vector(0, 0),
 		new GlColor4fRGB(0.5f, 0.0f, 1.0f, 1.0f),
 		new StrikerMoveAreaLimits(
-			playLayout->field.positionY - (playLayout->field.height / 2),
-			playLayout->field.positionX + playLayout->field.width,
+			playLayout->field->position->y - (playLayout->field->height / 2),
+			playLayout->field->position->x + playLayout->field->width,
 			goalPositionY,
-			playLayout->field.positionX
+			playLayout->field->position->x
 		),
 		//
 		new CustomOpenGLRect(
-			0 - 125,
-			goalPositionY,
+			new Vector(0 - 125, goalPositionY),
 			250,
 			40,
 			*new GlColor4fRGB(0.0f, 0.0f, 0.0f, 1.0f)
@@ -148,24 +144,23 @@ void initPlayer1() {
 	);
 }
 void initPlayer2() {
-	float goalPositionY = playLayout->field.positionY;
+	float goalPositionY = playLayout->field->position->y;
 	float goalHeight = 40;
 	player2 = new Striker(
-		new Vector(0, playLayout->field.positionY - 75 - 50),
+		new Vector(0, playLayout->field->position->y - 75 - 50),
 		75,
 		new Vector(0, 0),
 		new Vector(0, 0),
 		new GlColor4fRGB(.0f, 0.0f, 0.5f, 1.0f),
 		new StrikerMoveAreaLimits(
 			goalPositionY - goalHeight,
-			playLayout->field.positionX + playLayout->field.width,
-			playLayout->field.positionY - (playLayout->field.height / 2),
-			playLayout->field.positionX
+			playLayout->field->position->x + playLayout->field->width,
+			playLayout->field->position->y - (playLayout->field->height / 2),
+			playLayout->field->position->x
 		),
 		//
 		new CustomOpenGLRect(
-			0 - 125,
-			goalPositionY,
+			new Vector(0 - 125, goalPositionY),
 			250,
 			goalHeight,
 			*new GlColor4fRGB(0.0f, 0.0f, 0.0f, 1.0f)
@@ -176,16 +171,16 @@ void initPuck() {
 	//Striker* players[2] = { player1 , player2 };
 
 	puck = new Puck(
-		new Vector(playLayout->field.positionX + (playLayout->field.width / 2), playLayout->field.positionY - (playLayout->field.height / 2)), // (0, 0)
+		new Vector(playLayout->field->position->x + (playLayout->field->width / 2), playLayout->field->position->y - (playLayout->field->height / 2)), // (0, 0)
 		50,
 		new Vector(0, 0),
 		new Vector(0, 0),
 		new GlColor4fRGB(0.0f, 0.5f, 0.0f, 1.0f),
 		new StrikerMoveAreaLimits(
-			playLayout->field.positionY,
-			playLayout->field.positionX + playLayout->field.width,
-			playLayout->field.positionY - playLayout->field.height,
-			playLayout->field.positionX
+			playLayout->field->position->y,
+			playLayout->field->position->x + playLayout->field->width,
+			playLayout->field->position->y - playLayout->field->height,
+			playLayout->field->position->x
 		),
 		player1,
 		player2
@@ -239,8 +234,8 @@ void SetTransformations() {
 	//set up the logical coordinate system of the window: [-100, 100] x [-100, 100]
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	float xAxis = (playLayout->background.width * 0.5);
-	float yAxis = (playLayout->background.height * 0.5);
+	float xAxis = (playLayout->background->width * 0.5);
+	float yAxis = (playLayout->background->height * 0.5);
 	gluOrtho2D(-xAxis, xAxis, -yAxis, yAxis);
 }
 
@@ -277,7 +272,7 @@ void OnDisplay() {
 	//glEnd();
 
 	player1->draw();
-	player1->goal -> draw();
+	player1->goal-> draw();
 	player2->draw();
 	player2->goal->draw();
 	puck->draw();
@@ -290,8 +285,14 @@ void OnDisplay() {
 		player1->update();
 		player2->update();
 		puck->update();
+		if (puck->hasRectIntersection(player1->goal)) {
+			std::cout << "goal1" << std::endl;
+		}
+		if (puck->hasRectIntersection(player2->goal)) {
+			std::cout << "goal2" << std::endl;
+		}
 
-		if (rightEdgeX + vx > playLayout->background.positionX + playLayout->background.width || leftEdgeX + vx < playLayout->background.positionX) vx *= -1;
+		if (rightEdgeX + vx > playLayout->background->position->x + playLayout->background->width || leftEdgeX + vx < playLayout->background->position->x) vx *= -1;
 
 		topEdgeX += vx;
 		leftEdgeX += vx;
@@ -305,12 +306,12 @@ void drawCordinate() {
 	glBegin(GL_LINES);
 	glColor3f(0, 1, 0);
 	// X-axis
-	glVertex2f(playLayout->background.positionX, 0);
-	glVertex2f(playLayout->background.positionX + playLayout->background.height, 0);
+	glVertex2f(playLayout->background->position->x, 0);
+	glVertex2f(playLayout->background->position->x + playLayout->background->height, 0);
 	glColor3f(0, 0, 1);
 	// Y-axis
-	glVertex2f(0, playLayout->background.positionY);
-	glVertex2f(0, playLayout->background.positionY - playLayout->background.height);
+	glVertex2f(0, playLayout->background->position->y);
+	glVertex2f(0, playLayout->background->position->y - playLayout->background->height);
 	glEnd();
 }
 
@@ -382,22 +383,22 @@ void onSpecialKeyPress(int key, int x, int y) {
 	{
 	case GLUT_KEY_LEFT: {
 		player1->moveLeft = true;
-		player1->velocity->x = 0;
+		//player1->velocity->x = 0;
 		break;
 	}
 	case GLUT_KEY_RIGHT: {
 		player1->moveRight = true;
-		player1->velocity->x = 0;
+		//player1->velocity->x = 0;
 		break;
 	}
 	case GLUT_KEY_UP: {
 		player1->moveUp = true;
-		player1->velocity->y = 0;
+		//player1->velocity->y = 0;
 		break;
 	}
 	case GLUT_KEY_DOWN: {
 		player1->moveDown = true;
-		player1->velocity->y = 0;
+		//player1->velocity->y = 0;
 		break;
 	}
 

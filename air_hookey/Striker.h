@@ -68,24 +68,40 @@ public:
 	}
 
 	void increaseVelocityX() {
-				if (this->isIncreasingVelocityXPositive && this->velocity->x < 7) this->velocity->x += 0.1;
-				else if (!this->isIncreasingVelocityXPositive && this->velocity->x > -7) this->velocity->x -= 0.1;
+		if (this->isIncreasingVelocityXPositive) {
+			if (this->velocity->x < 7) this->velocity->x += 0.1;
+		} else if (this->velocity->x > -7) this->velocity->x -= 0.1;
 	}
 	void decreaseVelocityX() {
-				// if (this->velocity->x > 0) this->velocity->x -= 0.1;
-				if (this->isIncreasingVelocityXPositive && this->velocity->x < 0) this->velocity->x -= 0.1;
-				else if (!this->isIncreasingVelocityXPositive && this->velocity->x > 0) this->velocity->x += 0.1;
+				//// if (this->velocity->x > 0) this->velocity->x -= 0.1;
+				//if (this->isIncreasingVelocityXPositive && this->velocity->x < 0) this->velocity->x -= 0.1;
+				//else if (!this->isIncreasingVelocityXPositive && this->velocity->x > 0) this->velocity->x += 0.1;
+		if (this->isIncreasingVelocityXPositive) {
+			if (this->velocity->x > 0) this->velocity->x -= 0.1;
+		}
+		else if (this->velocity->x < 0) this->velocity->x += 0.1;
 	}
 
-
+	//void increaseVelocityY() {
+	//			if (this->isIncreasingVelocityYPositive && this->velocity->y < 7) this->velocity->y += 0.1;
+	//			else if (!this->isIncreasingVelocityYPositive && this->velocity->y > -7) this->velocity->y -= 0.1;
+	//}
+	//void decreaseVelocityY() {
+	//			// if (this->velocity->y > 0) this->velocity->y -= 0.1;
+	//			if (this->isIncreasingVelocityYPositive && this->velocity->y < 0) this->velocity->y -= 0.1;
+	//			else if (!this->isIncreasingVelocityYPositive && this->velocity->y > 0) this->velocity->y += 0.1;
+	//}
 	void increaseVelocityY() {
-				if (this->isIncreasingVelocityYPositive && this->velocity->y < 7) this->velocity->y += 0.1;
-				else if (!this->isIncreasingVelocityYPositive && this->velocity->y > -7) this->velocity->y -= 0.1;
+		if (this->isIncreasingVelocityYPositive) {
+			if (this->velocity->y < 7) this->velocity->y += 0.1;
+		}
+		else if (this->velocity->y > -7) this->velocity->y -= 0.1;
 	}
 	void decreaseVelocityY() {
-				// if (this->velocity->y > 0) this->velocity->y -= 0.1;
-				if (this->isIncreasingVelocityYPositive && this->velocity->y < 0) this->velocity->y -= 0.1;
-				else if (!this->isIncreasingVelocityYPositive && this->velocity->y > 0) this->velocity->y += 0.1;
+		if (this->isIncreasingVelocityYPositive) {
+			if (this->velocity->y > 0) this->velocity->y -= 0.1;
+		}
+		else if (this->velocity->y < 0) this->velocity->y += 0.1;
 	}
 
 	void update() {
