@@ -44,6 +44,9 @@
     <ClCompile Include="Ball2d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CustomOpenGlText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PlayLayout.h" />
@@ -56,5 +59,6 @@
     <ClInclude Include="collisionUtils.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Ball2d.h" />
+    <ClInclude Include="CustomOpenGlText.h" />
   </ItemGroup>
 </Project>

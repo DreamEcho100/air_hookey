@@ -14,7 +14,7 @@
 
 #include "Ball2d.cpp"
 
-using namespace std;
+//using namespace std;
 
 #define M_PI 3.1479265358979323846
 

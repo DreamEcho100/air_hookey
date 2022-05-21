@@ -8,6 +8,7 @@
 #include "collisionUtils.h"
 //
 #include "Ball2d.cpp"
+#include <string>
 
 #pragma once
 
@@ -79,7 +80,7 @@ public:
 					}
 
 			this->position->add(this->velocity);
-			this->moveCounter -= 15;
+			this->moveCounter -= 10;
 		}
 
 		float dx = this->position->x - this->player1->position->x;
@@ -90,7 +91,7 @@ public:
 		if (distance < (this->radius + this->player1->radius)) {
 			this->resolveCollision(player1);
 			player1->position->add(new Vector(player1->velocity->x * -1, player1->velocity->y * -1));
-			this->moveCounter = 3000;
+			this->moveCounter = 4000;
 
 		}
 
@@ -102,7 +103,7 @@ public:
 		if (distance < (this->radius + this->player2->radius)) {
 			this->resolveCollision(player2);
 			player2->position->add(new Vector(player2->velocity->x * -1, player2->velocity->y * -1));
-			this->moveCounter = 3000;
+			this->moveCounter = 4000;
 		}
 	}
 
@@ -113,31 +114,20 @@ public:
 	// }
 
 	// https://stackoverflow.com/a/69860772/13961420
-bool hasRectIntersection (
-	// {x: cx, y: cy, r: cr}, this
-	// {x, y, width, height}
-	CustomOpenGLRect* rect
-	) {
-  float distX = abs(this->position->x - rect->position->x - rect->width / 2);
-  float distY = abs(this->position->y - rect->position->y - rect->height / 2);
+bool hasRectIntersection (CustomOpenGLRect* rect) {
+    float circleDistanceX = abs(this->position->x - rect->position->x);
+    float circleDistanceY = abs(this->position->y - rect->position->y);
 
-  if (distX > (rect->width / 2 + this->radius)) {
-    return false;
-  }
-  if (distY > (rect->height / 2 + this->radius)) {
-    return false;
-  }
+    if (circleDistanceX > (rect->width/2 + this->radius)) { return false; }
+    if (circleDistanceY > (rect->height/2 + this->radius)) { return false; }
 
-  if (distX <= (rect->width / 2)) {
-    return true;
-  }
-  if (distY <= (rect->height / 2)) {
-    return true;
-  }
+    if (circleDistanceX <= (rect->width/2)) { return true; } 
+    if (circleDistanceY <= (rect->height/2)) { return true; }
 
-  float dx = distX - rect->width / 2; // Δx
-  float dy = distY - rect->height / 2; // Δy
-  return dx * dx + dy * dy <= this->radius * this->radius;
+    float cornerDistance_sq = pow((circleDistanceX - rect->width/2), 2) +
+                         pow((circleDistanceY - rect->height/2), 2);
+
+    return (cornerDistance_sq <= (pow(this->radius,2)));
 };
 
 	/**

@@ -1,3 +1,4 @@
+#include <string>
 #include <windows.h>
 #include <gl/gl.h>
 #include <gl/glut.h>
@@ -15,9 +16,10 @@
 #include "Puck.h"
 #include "CustomOpenGLRect.h"
 #include "StrikerMoveAreaLimits.h"
+#include "CustomOpenGlText.h"
 
 
-using namespace std;
+//using namespace std;
 
 UINT prevFrameTime = -1;
 UINT currentFrameTime = -1;
@@ -35,9 +37,16 @@ Striker* player1;
 Striker* player2;
 Puck* puck;
 
+int player1Score = 0;
+int player2Score = 0;
+CustomOpenGlText *playerScoresTextHandler;
+std::string playersScoresText;
+
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "glu32.lib")
 #pragma comment(lib, "glut32.lib")
+
+std::string builPlayersScoresText();
 
 void InitGraphics(int argc, char* argv[]);
 
@@ -58,7 +67,10 @@ void initBackground();
 void initPlayer1();
 void initPlayer2();
 void initPuck();
-//Puck* puck;
+
+std::string builPlayersScoresText() {
+	return "player 1 = " + std::to_string(player1Score) + ", player 2 = " + std::to_string(player2Score);
+}
 
 int main(int argc, char* argv[]) {
 	initBackground();
@@ -83,6 +95,13 @@ void initBackground() {
 	float borderY = canvasY - (canvasHeight * 0.1);
 	float borderWidth = canvasWidth * 0.5;
 	float borderHeight = canvasHeight * 0.8;
+	//
+	playerScoresTextHandler = new CustomOpenGlText(
+		new Vector(),
+		new GlColor4fRGB(1.0f, 1.0f, 1.0f, 1.0f),
+		GLUT_BITMAP_8_BY_13,
+		builPlayersScoresText()
+	);
 	//
 	float fieldMarginX = abs(borderX * 0.1);
 	float fieldMarginY = abs(borderX * 0.1);
@@ -187,6 +206,12 @@ void initPuck() {
 	);
 }
 
+void resetingPositions() {
+	initPlayer1();
+	initPlayer2();
+	initPuck();
+}
+
 void InitGraphics(int argc, char* argv[]) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA);
@@ -276,8 +301,8 @@ void OnDisplay() {
 	player2->draw();
 	player2->goal->draw();
 	puck->draw();
+	playerScoresTextHandler->draw();
 	glFlush();
-
 
 	glutSwapBuffers();
 
@@ -285,18 +310,19 @@ void OnDisplay() {
 		player1->update();
 		player2->update();
 		puck->update();
+
+		bool isResetingPositions = false;
 		if (puck->hasRectIntersection(player1->goal)) {
-			std::cout << "goal1" << std::endl;
+			player2Score += 1;
+			playerScoresTextHandler->str = builPlayersScoresText();
+			isResetingPositions = true;
 		}
 		if (puck->hasRectIntersection(player2->goal)) {
-			std::cout << "goal2" << std::endl;
+			player1Score += 1;
+			playerScoresTextHandler->str = builPlayersScoresText();
+			isResetingPositions = true;
 		}
-
-		if (rightEdgeX + vx > playLayout->background->position->x + playLayout->background->width || leftEdgeX + vx < playLayout->background->position->x) vx *= -1;
-
-		topEdgeX += vx;
-		leftEdgeX += vx;
-		rightEdgeX += vx;
+		if (isResetingPositions) resetingPositions();
 	}
 
 	glutPostRedisplay();
@@ -353,21 +379,25 @@ void onKeyUp(unsigned char key, int x, int y) {
 	case 'a':
 	case 'A': {
 		player2->moveLeft = false;
+		player1->velocity->x = 0;
 		break;
 	}
 	case 'd':
 	case 'D': {
 		player2->moveRight = false;
+		player1->velocity->x = 0;
 		break;
 	}
 	case 'w':
 	case 'W': {
 		player2->moveUp = false;
+		player1->velocity->y = 0;
 		break;
 	}
 	case 's':
 	case 'S': {
 		player2->moveDown = false;
+		player1->velocity->y = 0;
 		break;
 	}
 
@@ -383,22 +413,18 @@ void onSpecialKeyPress(int key, int x, int y) {
 	{
 	case GLUT_KEY_LEFT: {
 		player1->moveLeft = true;
-		//player1->velocity->x = 0;
 		break;
 	}
 	case GLUT_KEY_RIGHT: {
 		player1->moveRight = true;
-		//player1->velocity->x = 0;
 		break;
 	}
 	case GLUT_KEY_UP: {
 		player1->moveUp = true;
-		//player1->velocity->y = 0;
 		break;
 	}
 	case GLUT_KEY_DOWN: {
 		player1->moveDown = true;
-		//player1->velocity->y = 0;
 		break;
 	}
 

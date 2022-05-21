@@ -142,6 +142,7 @@
     <ClCompile Include="Ball2d.cpp" />
     <ClCompile Include="collisionUtils.cpp" />
     <ClCompile Include="CustomOpenGLRect.cpp" />
+    <ClCompile Include="CustomOpenGlText.cpp" />
     <ClCompile Include="CustomOpenGLUtils.cpp" />
     <ClCompile Include="GlColor4fRGB.cpp" />
     <ClCompile Include="PlayLayout.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Ball2d.h" />
     <ClInclude Include="collisionUtils.h" />
     <ClInclude Include="CustomOpenGLRect.h" />
+    <ClInclude Include="CustomOpenGlText.h" />
     <ClInclude Include="CustomOpenGLUtils.h" />
     <ClInclude Include="GlColor4fRGB.h" />
     <ClInclude Include="PlayLayout.h" />
