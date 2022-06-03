@@ -46,7 +46,7 @@ std::string playersScoresText;
 #pragma comment(lib, "glu32.lib")
 #pragma comment(lib, "glut32.lib")
 
-std::string builPlayersScoresText();
+std::string buildPlayersScoresText();
 
 void InitGraphics(int argc, char* argv[]);
 
@@ -62,13 +62,13 @@ void onSpecialKeyUp(int key, int x, int y);
 
 void OnDisplay();
 
-void drawCordinate();
+void drawCoordinate();
 void initBackground();
 void initPlayer1();
 void initPlayer2();
 void initPuck();
 
-std::string builPlayersScoresText() {
+std::string buildPlayersScoresText() {
 	return "player 1 = " + std::to_string(player1Score) + ", player 2 = " + std::to_string(player2Score);
 }
 
@@ -97,10 +97,10 @@ void initBackground() {
 	float borderHeight = canvasHeight * 0.8;
 	//
 	playerScoresTextHandler = new CustomOpenGlText(
-		new Vector(),
+		new Vector(0, 0),
 		new GlColor4fRGB(1.0f, 1.0f, 1.0f, 1.0f),
 		GLUT_BITMAP_8_BY_13,
-		builPlayersScoresText()
+		buildPlayersScoresText()
 	);
 	//
 	float fieldMarginX = abs(borderX * 0.1);
@@ -274,27 +274,7 @@ void OnDisplay() {
 
 	playLayout->draw();
 
-	drawCordinate();
-
-
-	//glBegin(GL_QUADS);
-
-	//glVertex2f(playLayout->fieldX);
-
-	//glEnd();
-
-	//glTranslated(0, 0, 0);
-	//glScalef(1, 1, 1);
-	//glRotatef(0, 0, 0, 0);
-
-	//glBegin(GL_TRIANGLES);
-	//glColor3f(1, 0, 0);
-	//glVertex2f(rightEdgeX, 0);
-	//glColor3f(0, 1, 0);
-	//glVertex2f(topEdgeX, 30);
-	//glColor3f(0, 0, 1);
-	//glVertex2f(leftEdgeX, 0);
-	//glEnd();
+	drawCoordinate();
 
 	player1->draw();
 	player1->goal-> draw();
@@ -314,12 +294,12 @@ void OnDisplay() {
 		bool isResetingPositions = false;
 		if (puck->hasRectIntersection(player1->goal)) {
 			player2Score += 1;
-			playerScoresTextHandler->str = builPlayersScoresText();
+			playerScoresTextHandler->str = buildPlayersScoresText();
 			isResetingPositions = true;
 		}
 		if (puck->hasRectIntersection(player2->goal)) {
 			player1Score += 1;
-			playerScoresTextHandler->str = builPlayersScoresText();
+			playerScoresTextHandler->str = buildPlayersScoresText();
 			isResetingPositions = true;
 		}
 		if (isResetingPositions) resetingPositions();
@@ -328,7 +308,7 @@ void OnDisplay() {
 	glutPostRedisplay();
 }
 
-void drawCordinate() {
+void drawCoordinate() {
 	glBegin(GL_LINES);
 	glColor3f(0, 1, 0);
 	// X-axis

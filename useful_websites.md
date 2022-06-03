@@ -11,6 +11,7 @@
 - [How do you define a global function in C++?](https://stackoverflow.com/a/6874391/13961420)
 - [How to react on KeyPress + Release?](https://gamedev.net/forums/topic/660020-how-to-react-on-keypress-release/5174660/)
 - [How to Code: Collision Detection Part II](https://youtu.be/789weryntzM)
+- [Circle-Rectangle collision detection (intersection)](https://stackoverflow.com/a/402010/13961420)
 
 ## 2
 
